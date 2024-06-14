@@ -1,0 +1,132 @@
+syntax = "proto3";
+
+option go_package = "./;pb";
+
+package src;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+
+message Chat {
+    uint32 id = 1;
+    string name = 2;
+    google.protobuf.Timestamp created_at = 3;
+    google.protobuf.Timestamp updated_at = 4;
+    bool is_public = 5;
+
+    repeated Participant participants = 6;
+    repeated Message messages = 7;
+}
+
+message Chats {
+    repeated Chat chats = 1;
+}
+
+message Message {
+    uint32 id = 1;
+    uint32 chat_id = 2;
+    uint32 author_id = 3;
+    google.protobuf.Timestamp created_at = 4;
+    google.protobuf.Timestamp updated_at = 5;
+    string text = 6;
+    MessageStatus status = 7;
+}
+
+message Participant {
+    uint32 chat_id = 1;
+    uint32 user_id = 2;
+}
+
+enum MessageStatus {
+    DELIEVERED = 0;
+    READED = 1;
+}
+
+message CreateChatRequest {
+    string name = 1;
+    bool is_public = 2; 
+    repeated uint32 participants = 3;
+}
+
+message GetChatByIdRequest {
+    uint32 chat_id = 1;
+}
+
+message GetChatByIdResponse {
+    Chat chat = 1;
+}
+
+message GetChatsForUserRequest {
+    uint32 user_id = 1;
+}
+
+message GetChatsForUserResponse {
+    repeated Chat chats = 1;
+}
+
+message UpdateChatRequest {
+    uint32 chat_id = 1;
+    string name = 2;
+}
+
+message DeleteChatByIdRequest {
+    uint32 chat_id = 1;
+}
+
+message AddParticipantRequest {
+    uint32 chat_id = 1;
+    uint32 user_id = 2;
+}
+
+message DeleteParticipantRequest {
+    uint32 chat_id = 1;
+    uint32 user_id = 2;
+}
+
+
+message CreateMessageRequest {
+    uint32 chat_id = 1;
+    uint32 author_id = 2;
+    string text = 3;
+}
+
+message GetMessagesForChatRequest {
+    uint32 chat_id = 1;
+}
+
+message GetMessagesForChatResponse {
+    repeated Message messages = 1;
+}
+
+message UpdateMessageTextRequest {
+    uint32 message_id = 1;
+    string text = 2;
+}
+
+message UpdateMessageStatusRequest {
+    uint32 message_id = 1;
+    MessageStatus status = 2;
+}
+
+message DeleteMessageByIdRequest {
+    uint32 message_id = 1;
+}
+
+service ChatService {
+    //chats
+    rpc CreateChat(CreateChatRequest)                       returns(google.protobuf.Empty);
+    rpc GetChatById(GetChatByIdRequest)                     returns(GetChatByIdResponse);
+    rpc GetChatsForUser(GetChatsForUserRequest)             returns(GetChatsForUserResponse);
+    rpc UpdateChatName(UpdateChatRequest)                   returns(google.protobuf.Empty);
+    rpc AddParticipantToChat(AddParticipantRequest)         returns(google.protobuf.Empty);
+    rpc DeleteParticipantFromChat(DeleteParticipantRequest) returns(google.protobuf.Empty);
+    rpc DeleteChatById(DeleteChatByIdRequest)               returns(google.protobuf.Empty);
+
+
+    //messages
+    rpc CreateMessage(CreateMessageRequest)             returns(google.protobuf.Empty);
+    rpc GetMessagesForChat(GetMessagesForChatRequest)   returns(GetMessagesForChatResponse);
+    rpc UpdateMessageText(UpdateMessageTextRequest)     returns(google.protobuf.Empty);
+    rpc UpdateMessageStatus(UpdateMessageStatusRequest) returns(google.protobuf.Empty);
+    rpc DeleteMessageById(DeleteMessageByIdRequest)     returns(google.protobuf.Empty);   
+}
