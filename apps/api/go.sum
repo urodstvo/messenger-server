@@ -1,4 +1,6 @@
 github.com/google/go-cmp v0.6.0 h1:ofyhxvXcZhMsU5ulbFiLKl/XBFqE1GSq7atu8tAmTRI=
+github.com/urodstvo/messenger-server/libs/grpc v0.0.0-20240615113456-7cfbe55c0ba9 h1:y15vGEVqzDXQtoloHhphlBs+sAhRaag/tkhPqcOJUGE=
+github.com/urodstvo/messenger-server/libs/grpc v0.0.0-20240615113456-7cfbe55c0ba9/go.mod h1:gdspFV8aQF7s5a5+AJvq+5Fcp8+qJWgPhQXeEpIOCUA=
 golang.org/x/net v0.26.0 h1:soB7SVo0PWrY4vPW/+ay0jKDNScG2X9wFeYlXIvJsOQ=
 golang.org/x/net v0.26.0/go.mod h1:5YKkiSynbBIh3p6iOc/vibscux0x38BZDkn8sCUPxHE=
 golang.org/x/sys v0.21.0 h1:rF+pYz3DAGSQAxAu1CbC7catZg4ebC4UIeIhKxBZvws=

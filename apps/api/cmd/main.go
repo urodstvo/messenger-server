@@ -49,10 +49,12 @@ func main() {
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "Welcome to my website!")
-		_, err := handler.chats.CreateChat(context.Background(), &pb.CreateChatRequest{Name: "John", IsPublic: true, Participants: []uint32{1, 2}})
+		_, err := handler.chats.CreateChat(context.Background(), &pb.CreateChatRequest{Name: "John", IsPublic: true, Participants: []uint32{}})
 
 		if err != nil {
 			log.Fatal(err)
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(err.Error()))
 		}
 	})
 

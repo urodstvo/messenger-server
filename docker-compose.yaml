@@ -4,6 +4,8 @@ services:
         build: ./apps/api
         ports:
             - "80:80"
+        environment:
+            - CHAT_SERVICE_URI=chat:8000
         depends_on:
             - chat
 
