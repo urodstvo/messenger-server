@@ -4,7 +4,6 @@ FROM golang:1.20.6-alpine AS builder
 RUN adduser -D -g '' elf
 # create workspace
 WORKDIR /opt/app/
-# COPY go.mod go.sum ./
 COPY go.mod go.sum ./
 # fetch dependancies
 RUN go mod download && \
@@ -12,7 +11,9 @@ RUN go mod download && \
 # copy the source code as the last step
 COPY . .
 # build binary
-RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-w -s" -a -installsuffix cgo -o /go/bin/api ./cmd/
+RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-w -s" -a -installsuffix cgo -o /go/bin/user ./cmd/
+
+
 
 # build a small image
 FROM alpine:3.17.3
@@ -22,8 +23,8 @@ LABEL language="golang"
 # import the user and group files from the builder
 COPY --from=builder /etc/passwd /etc/passwd
 # copy the static executable
-COPY --from=builder --chown=elf:1000 /go/bin/api /api
+COPY --from=builder --chown=elf:1000 /go/bin/user /user
 # use a non-root user
 USER elf
 # run app
-ENTRYPOINT ["./api"]
+ENTRYPOINT ["./user"]

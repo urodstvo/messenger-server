@@ -8,10 +8,25 @@ services:
             - CHAT_SERVICE_URI=chat:8000
         depends_on:
             - chat
+            - user
 
     chat:
         container_name: messenger-chat
         build: ./apps/chat
+        ports:
+            - "8000:8000"
+        environment:
+            - POSTGRES_HOST=postgres
+            - POSTGRES_PORT=5432
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=postgres
+            - POSTGRES_DB=postgres
+        depends_on:
+            - postgres
+
+    user:
+        container_name: messenger-user
+        build: ./apps/user
         ports:
             - "8000:8000"
         environment:
