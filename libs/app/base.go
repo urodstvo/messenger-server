@@ -16,6 +16,7 @@ func CreateBaseApp(appName string) fx.Option {
 				},
 			),
 			newGorm,
+			newRedis,
 		),
 	)
 }

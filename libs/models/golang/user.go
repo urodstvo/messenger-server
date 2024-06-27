@@ -20,8 +20,8 @@ type User struct {
 	CreatedAt time.Time  `json:"created_at"`
 	UpdatedAt time.Time  `json:"updated_at"`
 	DeletedAt *time.Time `json:"deleted_at"`
+	Email     string     `gorm:"unique" json:"email"`
 	Tag       string     `gorm:"unique" json:"tag"`
-	Password  string     `json:"password"`
 	FirstName string     `json:"first_name"`
 	LastName  string     `json:"last_name"`
 	Role      UserRole   `gorm:"default:user" json:"role"`
@@ -48,4 +48,16 @@ type BlockedUser struct {
 
 func (BlockedUser) TableName() string {
 	return "blocked_users"
+}
+
+type OTP struct {
+	Email     string    `gorm:"primary_key" json:"email"`
+	Otp       string    `json:"otp"`
+	ExpiresAt time.Time `json:"expires_at"`
+
+	User User `gorm:"foreignkey:Email;references:Email" json:"user"`
+}
+
+func (OTP) TableName() string {
+	return "otps"
 }

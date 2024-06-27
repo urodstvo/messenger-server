@@ -47,13 +47,21 @@ func New(opts Opts) *Chat {
 
 	chat.manager.HandleConnect(
 		func(session *melody.Session) {
-			if err := helpers.CheckAuthentificateUser(session, opts.AuthGrpc); err != nil {
+			if err := helpers.CheckAuthentificateUser(session, opts.Config.JWTSecret); err != nil {
 				opts.Logger.Error("cannot check user by api key", slog.Any("err", err))
+				session.Close()
 				return
 			}
 
 			if err := helpers.CheckChatId(opts.DB, session); err != nil {
 				opts.Logger.Error("cannot check chat id", slog.Any("err", err))
+				session.Close()
+				return
+			}
+
+			if err := helpers.CheckAvailabilityForConnect(opts.DB, session); err != nil {
+				opts.Logger.Error("cannot connect to chat", slog.Any("err", err))
+				session.Close()
 				return
 			}
 

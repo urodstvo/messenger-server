@@ -9,16 +9,15 @@ message User {
     uint32 id = 1;
     string first_name = 2;
     string last_name = 3;
-    string username = 4;
-    string password = 5;
+    string tag = 4;
+    string email = 5;
     google.protobuf.Timestamp created_at = 6;
     google.protobuf.Timestamp updated_at = 7;
-    google.protobuf.Empty deleted_at = 8;
 }
 
 message CreateUserRequest {
-    string username = 1;
-    string password = 2;
+    string tag = 1;
+    string email = 2;
 }
 
 message GetUserByIdRequest {
@@ -37,11 +36,11 @@ message GetUsersByIdsResponse {
     repeated User users = 1;
 }
 
-message GetUsersLikeUsernameRequest {
-    string username = 1;
+message GetUsersLikeTagRequest {
+    string tag = 1;
 }
 
-message GetUsersLikeUsernameResponse {
+message GetUsersLikeTagResponse {
     repeated User users = 1;
 }
 
@@ -52,16 +51,16 @@ message GetUsersLikeFirstLastNameRequest {
 
 message GetUsersLikeFirstLastNameResponse {
     repeated User users = 1;
-}
-
-message UpdateUserNameRequest {
-    uint32 user_id = 1;
-    string username = 2;
 } 
 
-message UpdateUserPasswordRequest {
+message UpdateUserTagRequest {
     uint32 user_id = 1;
-    string password = 2;
+    string tag = 2;
+} 
+
+message UpdateUserEmailRequest {
+    uint32 user_id = 1;
+    string email = 2;
 }
 
 message UpdateUserFirstLastNameRequest {
@@ -70,19 +69,60 @@ message UpdateUserFirstLastNameRequest {
     string last_name = 3;
 }
 
-message DeleteUserRequest {
+message DeleteUserByIdRequest {
     uint32 user_id = 1;
 }
 
+message GenerateOTPRequest {
+    string email = 1;
+}
+
+message LoginRequest {
+    string email = 1;
+    string otp = 2;
+}
+
+message LoginResponse {
+    string access_token = 1;
+    string refresh_token = 2;
+}
+
+message RegisterRequest {
+    string email = 1;
+    string otp = 2;
+    string tag = 3;
+    optional string first_name = 4;
+    optional string last_name = 5;
+}
+
+message RegisterResponse {
+    string access_token = 1;
+    string refresh_token = 2;
+}
+
+message CheckEmailExistsRequest {
+    string email = 1;
+}
+
+message CheckEmailExistsResponse {
+    bool exists = 1;
+}
 
 service AuthService {
+    // user API
     rpc CreateUser(CreateUserRequest) returns (google.protobuf.Empty);
     rpc GetUserById(GetUserByIdRequest) returns (GetUserByIdResponse);
-    rpc GetUsersByIds(GetUsersByIdsRequest) returns (GetUsersByIdsResponse);
-    rpc GetUsersLikeUsername(GetUsersLikeUsernameRequest) returns (GetUsersLikeUsernameResponse);
+    rpc GetUsersLikeTag(GetUsersLikeTagRequest) returns (GetUsersLikeTagResponse);
     rpc GetUsersLikeFirstLastName(GetUsersLikeFirstLastNameRequest) returns (GetUsersLikeFirstLastNameResponse);
-    rpc UpdateUserName(UpdateUserNameRequest) returns (google.protobuf.Empty);
-    rpc UpdateUserPassword(UpdateUserPasswordRequest) returns (google.protobuf.Empty);
+    rpc UpdateUserTag(UpdateUserTagRequest) returns (google.protobuf.Empty);
+    rpc UpdateUserEmail(UpdateUserEmailRequest) returns (google.protobuf.Empty);
     rpc UpdateUserFirstLastName(UpdateUserFirstLastNameRequest) returns (google.protobuf.Empty);
-    rpc DeleteUser(DeleteUserRequest) returns (google.protobuf.Empty);
+    rpc DeleteUserById(DeleteUserByIdRequest) returns (google.protobuf.Empty);
+
+    // auth API
+    rpc GenerateOTP(GenerateOTPRequest) returns (google.protobuf.Empty);
+    rpc Login(LoginRequest) returns (LoginResponse);
+    rpc Register(RegisterRequest) returns (RegisterResponse);
+    rpc CheckEmailExists(CheckEmailExistsRequest) returns (CheckEmailExistsResponse);
+
 }

@@ -19,6 +19,9 @@ var App = fx.Module(
 		func(c config.Config) proto.ChatServiceClient {
 			return clients.NewChatAppClient(c.EnvMode == "production")
 		},
+		func(c config.Config) proto.AuthServiceClient {
+			return clients.NewAuthAppClient(c.EnvMode == "production")
+		},
 		//TODO
 	),
 	fx.Invoke(

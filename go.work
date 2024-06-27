@@ -8,6 +8,7 @@ use (
 	./libs/app
 	./libs/config
 	./libs/grpc
+	./libs/jwt
 	./libs/logger
 	./libs/migrations
 	./libs/models

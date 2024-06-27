@@ -10,8 +10,15 @@ import (
 )
 
 type Config struct {
+	JWTSecret   string `envconfig:"JWT_SECRET"`
 	EnvMode     string `envconfig:"ENVIRONMENT_MODE" default:"development"`
 	DatabaseUrl string `envconfig:"DATABASE_URL"`
+	RedisUrl    string `envconfig:"REDIS_URL"`
+
+	EmailFrom     string `envconfig:"EMAIL_FROM"`
+	EmailPassword string `envconfig:"EMAIL_PASSWORD"`
+	EmailHost     string `envconfig:"EMAIL_HOST"`
+	EmailPort     string `envconfig:"EMAIL_PORT"`
 }
 
 func NewWithEnvPath(envPath string) (*Config, error) {

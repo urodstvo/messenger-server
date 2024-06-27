@@ -5,12 +5,10 @@ import (
 
 	"github.com/olahol/melody"
 
-	proto "github.com/urodstvo/messenger-server/libs/grpc/proto/__generated__"
+	"github.com/urodstvo/messenger-server/libs/jwt"
 )
 
-//TODO
-
-func CheckAuthentificateUser(session *melody.Session, authGRPC proto.AuthServiceClient) error {
+func CheckAuthentificateUser(session *melody.Session, secret string) error {
 	apiKey := session.Request.Header.Get("Authorization")
 	if apiKey == "" {
 		session.Close()
@@ -18,7 +16,7 @@ func CheckAuthentificateUser(session *melody.Session, authGRPC proto.AuthService
 	}
 
 	// check api key
-	userId, err := authGRPC.CheckApiKey(apiKey)
+	userId, err := jwt.Parse(apiKey, secret)
 	if err != nil {
 		session.Close()
 		return err
