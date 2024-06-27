@@ -4,8 +4,6 @@ services:
         build: ./apps/api
         ports:
             - "80:80"
-        environment:
-            - CHAT_SERVICE_URI=chat:8000
         depends_on:
             - chat
             - user
@@ -18,9 +16,9 @@ services:
         environment:
             - POSTGRES_HOST=postgres
             - POSTGRES_PORT=5432
-            - POSTGRES_USER=postgres
-            - POSTGRES_PASSWORD=postgres
-            - POSTGRES_DB=postgres
+            - POSTGRES_USER
+            - POSTGRES_PASSWORD
+            - POSTGRES_DB
         depends_on:
             - postgres
 
@@ -28,22 +26,22 @@ services:
         container_name: messenger-user
         build: ./apps/user
         ports:
-            - "8000:8000"
+            - "8001:8001"
         environment:
             - POSTGRES_HOST=postgres
             - POSTGRES_PORT=5432
-            - POSTGRES_USER=postgres
-            - POSTGRES_PASSWORD=postgres
-            - POSTGRES_DB=postgres
+            - POSTGRES_USER
+            - POSTGRES_PASSWORD
+            - POSTGRES_DB
         depends_on:
             - postgres
 
     postgres:
         container_name: messenger-postgres
-        image: postgres
+        image: postgres:16.3-alpine
         ports:
             - "5432:5432"
         environment:
-            - POSTGRES_USER=postgres
-            - POSTGRES_PASSWORD=postgres
-            - POSTGRES_DB=postgres
+            - POSTGRES_USER
+            - POSTGRES_PASSWORD
+            - POSTGRES_DB

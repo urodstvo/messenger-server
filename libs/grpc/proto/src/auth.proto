@@ -1,0 +1,88 @@
+syntax = "proto3";
+option go_package = "github.com/urodstvo/messenger-server/libs/grpc/proto/__generated__;__generated__";
+package src;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+
+message User {
+    uint32 id = 1;
+    string first_name = 2;
+    string last_name = 3;
+    string username = 4;
+    string password = 5;
+    google.protobuf.Timestamp created_at = 6;
+    google.protobuf.Timestamp updated_at = 7;
+    google.protobuf.Empty deleted_at = 8;
+}
+
+message CreateUserRequest {
+    string username = 1;
+    string password = 2;
+}
+
+message GetUserByIdRequest {
+    uint32 user_id = 1;
+}
+
+message GetUserByIdResponse {
+    User user = 1;
+}
+
+message GetUsersByIdsRequest {
+    repeated uint32 user_ids = 1;
+}
+
+message GetUsersByIdsResponse {
+    repeated User users = 1;
+}
+
+message GetUsersLikeUsernameRequest {
+    string username = 1;
+}
+
+message GetUsersLikeUsernameResponse {
+    repeated User users = 1;
+}
+
+message GetUsersLikeFirstLastNameRequest {
+    string first_name = 1;
+    string last_name = 2;
+}
+
+message GetUsersLikeFirstLastNameResponse {
+    repeated User users = 1;
+}
+
+message UpdateUserNameRequest {
+    uint32 user_id = 1;
+    string username = 2;
+} 
+
+message UpdateUserPasswordRequest {
+    uint32 user_id = 1;
+    string password = 2;
+}
+
+message UpdateUserFirstLastNameRequest {
+    uint32 user_id = 1;
+    string first_name = 2;
+    string last_name = 3;
+}
+
+message DeleteUserRequest {
+    uint32 user_id = 1;
+}
+
+
+service AuthService {
+    rpc CreateUser(CreateUserRequest) returns (google.protobuf.Empty);
+    rpc GetUserById(GetUserByIdRequest) returns (GetUserByIdResponse);
+    rpc GetUsersByIds(GetUsersByIdsRequest) returns (GetUsersByIdsResponse);
+    rpc GetUsersLikeUsername(GetUsersLikeUsernameRequest) returns (GetUsersLikeUsernameResponse);
+    rpc GetUsersLikeFirstLastName(GetUsersLikeFirstLastNameRequest) returns (GetUsersLikeFirstLastNameResponse);
+    rpc UpdateUserName(UpdateUserNameRequest) returns (google.protobuf.Empty);
+    rpc UpdateUserPassword(UpdateUserPasswordRequest) returns (google.protobuf.Empty);
+    rpc UpdateUserFirstLastName(UpdateUserFirstLastNameRequest) returns (google.protobuf.Empty);
+    rpc DeleteUser(DeleteUserRequest) returns (google.protobuf.Empty);
+}

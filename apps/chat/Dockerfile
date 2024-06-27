@@ -6,8 +6,7 @@ RUN adduser -D -g '' elf
 WORKDIR /opt/app/
 COPY go.mod go.sum ./
 # fetch dependancies
-RUN go mod download && \
-    go mod verify
+RUN go mod download && go mod verify
 # copy the source code as the last step
 COPY . .
 # build binary

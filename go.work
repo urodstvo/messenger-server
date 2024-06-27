@@ -1,10 +1,14 @@
-go 1.20
+go 1.22.4
 
 use (
-	./libs/grpc
-	./libs/models
-	
 	./apps/api
+	./apps/auth
 	./apps/chat
-	./apps/user
+	./apps/notification
+	./libs/app
+	./libs/config
+	./libs/grpc
+	./libs/logger
+	./libs/migrations
+	./libs/models
 )

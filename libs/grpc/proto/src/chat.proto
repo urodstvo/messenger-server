@@ -1,7 +1,5 @@
 syntax = "proto3";
-
-option go_package = "./;pb";
-
+option go_package = "github.com/urodstvo/messenger-server/libs/grpc/proto/__generated__;__generated__";
 package src;
 
 import "google/protobuf/timestamp.proto";
@@ -10,12 +8,13 @@ import "google/protobuf/empty.proto";
 message Chat {
     uint32 id = 1;
     string name = 2;
-    google.protobuf.Timestamp created_at = 3;
-    google.protobuf.Timestamp updated_at = 4;
-    bool is_public = 5;
+    string tag = 3;
+    google.protobuf.Timestamp created_at = 4;
+    google.protobuf.Timestamp updated_at = 5;
+    bool is_public = 6;
 
-    repeated Participant participants = 6;
-    repeated Message messages = 7;
+    repeated Participant participants = 7;
+    repeated Message messages = 8;
 }
 
 message Chats {
@@ -35,17 +34,29 @@ message Message {
 message Participant {
     uint32 chat_id = 1;
     uint32 user_id = 2;
+    ParticipantRole role = 3;
 }
 
 enum MessageStatus {
-    DELIEVERED = 0;
+    CREATED = 0;
     READED = 1;
 }
 
+enum ParticipantRole {
+    MEMBER = 0;
+    ADMIN = 1;
+    OWNER = 2;
+}
+
 message CreateChatRequest {
-    string name = 1;
-    bool is_public = 2; 
-    repeated uint32 participants = 3;
+    string tag = 1;
+    string name = 2;
+    bool is_public = 3; 
+    repeated uint32 participants = 4;
+}
+
+message CreateChatResponse {
+    uint32 id = 1;
 }
 
 message GetChatByIdRequest {
@@ -90,6 +101,10 @@ message CreateMessageRequest {
     string text = 3;
 }
 
+message CreateMessageResponse {
+    uint32 id = 1;
+}
+
 message GetMessagesForChatRequest {
     uint32 chat_id = 1;
 }
@@ -114,7 +129,7 @@ message DeleteMessageByIdRequest {
 
 service ChatService {
     //chats
-    rpc CreateChat(CreateChatRequest)                       returns(google.protobuf.Empty);
+    rpc CreateChat(CreateChatRequest)                       returns(CreateChatResponse);
     rpc GetChatById(GetChatByIdRequest)                     returns(GetChatByIdResponse);
     rpc GetChatsForUser(GetChatsForUserRequest)             returns(GetChatsForUserResponse);
     rpc UpdateChatName(UpdateChatRequest)                   returns(google.protobuf.Empty);
@@ -124,7 +139,7 @@ service ChatService {
 
 
     //messages
-    rpc CreateMessage(CreateMessageRequest)             returns(google.protobuf.Empty);
+    rpc CreateMessage(CreateMessageRequest)             returns(CreateMessageResponse);
     rpc GetMessagesForChat(GetMessagesForChatRequest)   returns(GetMessagesForChatResponse);
     rpc UpdateMessageText(UpdateMessageTextRequest)     returns(google.protobuf.Empty);
     rpc UpdateMessageStatus(UpdateMessageStatusRequest) returns(google.protobuf.Empty);

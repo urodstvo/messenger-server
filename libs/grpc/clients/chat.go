@@ -3,12 +3,13 @@ package clients
 import (
 	"log"
 
-	"github.com/urodstvo/messenger-server/libs/grpc/proto/__generated__/pb"
+	"github.com/urodstvo/messenger-server/libs/grpc/constants"
+	pb "github.com/urodstvo/messenger-server/libs/grpc/proto/__generated__"
 	"google.golang.org/grpc"
 )
 
-func NewChatAppClient(isProduction bool, port uint) pb.ChatServiceClient {
-	serverAddress := createClientAddr(isProduction, "chat", int(port))
+func NewChatAppClient(isProduction bool) pb.ChatServiceClient {
+	serverAddress := createClientAddr(isProduction, "chat", constants.CHAT_SERVER_PORT)
 
 	conn, err := grpc.NewClient(
 		serverAddress,

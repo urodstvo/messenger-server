@@ -7,8 +7,8 @@ import (
 type MessageStatus string
 
 const (
-	MessageDelievered MessageStatus = "delievered"
-	MessageReaded     MessageStatus = "readed"
+	MessageCreated MessageStatus = "created"
+	MessageReaded  MessageStatus = "readed"
 )
 
 type Message struct {
@@ -19,8 +19,12 @@ type Message struct {
 	UpdatedAt time.Time     `json:"updated_at"`
 	DeletedAt *time.Time    `json:"deleted_at"`
 	Text      string        `json:"text"`
-	Status    MessageStatus `json:"status"`
+	Status    MessageStatus `gorm:"default:created" json:"status"`
 
 	Chat   Chat `gorm:"foreignkey:ChatID;references:ID" json:"chat"`
 	Author User `gorm:"foreignkey:AuthorID;references:ID" json:"author"`
+}
+
+func (m *Message) TableName() string {
+	return "messages"
 }
